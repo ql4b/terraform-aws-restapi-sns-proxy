@@ -34,3 +34,11 @@ output "usage_plan_id" {
   description = "Usage plan ID (if created)"
   value       = local.create_usage_plan ? aws_api_gateway_usage_plan.this[0].id : null
 }
+
+output "capture_invoke_urls" {
+  description = "Invoke URL for the /capture resource per stage"
+  value = {
+    for stage in local.stages :
+    stage => "https://${aws_api_gateway_rest_api.this[stage].id}.execute-api.${data.aws_region.current.name}.amazonaws.com/${aws_api_gateway_stage.this[stage].stage_name}/capture"
+  }
+}
