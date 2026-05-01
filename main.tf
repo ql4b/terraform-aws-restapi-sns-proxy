@@ -103,6 +103,12 @@ resource "aws_api_gateway_integration_response" "post" {
   response_parameters = {
     "method.response.header.Access-Control-Allow-Origin" = "'*'"
   }
+
+  response_templates = {
+    "application/json" = "{\"message\": \"Event received\"}"
+  }
+
+  depends_on = [aws_api_gateway_integration.sns]
 }
 
 # Deployments
@@ -121,6 +127,7 @@ resource "aws_api_gateway_deployment" "this" {
       aws_api_gateway_method.post[each.key].id,
       aws_api_gateway_integration.sns[each.key].id,
       aws_api_gateway_integration.sns[each.key].request_templates,
+      aws_api_gateway_integration_response.post[each.key].id,
     ]))
   }
 }
