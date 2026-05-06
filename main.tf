@@ -105,7 +105,7 @@ resource "aws_api_gateway_integration_response" "post" {
   }
 
   response_templates = {
-    "application/json" = "{\"message\": \"Event received\"}"
+    "application/json" = "$input.body"
   }
 
   depends_on = [aws_api_gateway_integration.sns]
@@ -128,6 +128,7 @@ resource "aws_api_gateway_deployment" "this" {
       aws_api_gateway_integration.sns[each.key].id,
       aws_api_gateway_integration.sns[each.key].request_templates,
       aws_api_gateway_integration_response.post[each.key].id,
+      aws_api_gateway_integration_response.post[each.key].response_templates,
     ]))
   }
 }
