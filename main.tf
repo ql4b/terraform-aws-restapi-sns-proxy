@@ -105,7 +105,7 @@ resource "aws_api_gateway_integration_response" "post" {
   }
 
   response_templates = {
-    "application/json" = "{\"message\": \"Event received\"}"
+    "application/json" = ""
   }
 
   depends_on = [aws_api_gateway_integration.sns]
